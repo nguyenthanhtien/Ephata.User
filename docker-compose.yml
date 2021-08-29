@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+    userservice:
+        container_name: user-service
+        build: .
+        ports:
+            - "8000:80"
+        volumes: 
+            - "/Ephata.User.WebAPI/appsettings.Development.json:/appsettings.Development.json"
+        depends_on:
+            - sql-server
+        networks: 
+            - userservice_network
+    sqlserver:
+        container_name: sql-service
+        image: mcr.microsoft.com/mssql/server
+        environment:
+            SA_PASSWORD: "Admin@123"
+            ACCEPT_EULA: "Y"
+            MSSQL_PID: Express
+        restart: unless-stopped    
+        networks: 
+            - userservice_network
+networks:
+  userservice_network:
+    driver: bridge
+  
