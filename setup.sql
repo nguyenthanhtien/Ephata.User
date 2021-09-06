@@ -1,4 +1,7 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿CREATE DATABASE Ephata;
+GO
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -6,9 +9,6 @@ BEGIN
         CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
     );
 END;
-GO
-
-BEGIN TRANSACTION;
 GO
 
 CREATE TABLE [AspNetRoles] (
@@ -150,7 +150,3 @@ GO
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20210822080458_InitDatabase', N'5.0.9');
 GO
-
-COMMIT;
-GO
-

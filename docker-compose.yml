@@ -8,20 +8,16 @@ services:
         volumes: 
             - "/Ephata.User.WebAPI/appsettings.Development.json:/appsettings.Development.json"
         depends_on:
-            - sql-server
-        networks: 
-            - userservice_network
+            - sqlserver
     sqlserver:
         container_name: sql-service
-        image: mcr.microsoft.com/mssql/server
         environment:
             SA_PASSWORD: "Admin@123"
             ACCEPT_EULA: "Y"
             MSSQL_PID: Express
-        restart: unless-stopped    
-        networks: 
-            - userservice_network
-networks:
-  userservice_network:
-    driver: bridge
+        ports: 
+            - "1439:1433"
+        build: 
+            context: .
+            dockerfile: Dockerfile.Migration
   

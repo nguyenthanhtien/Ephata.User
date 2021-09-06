@@ -1,23 +1,10 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
 
-WORKDIR /src
-# Copy csproj and restore as distinct layers
-COPY *.sln .
-COPY ./*/*.csproj ./*/
-# RUN for file in $(ls *.csproj); do mkdir -p /${file%.*}/ && mv $file /${file%.*}/; done
-COPY ./Ephata.User.Data/ ./Ephata.User.Data/
-COPY ./Ephata.User.DomainLayer/ ./Ephata.User.DomainLayer/
-COPY ./Ephata.User.Service/ ./Ephata.User.Service/
-COPY ./Ephata.User.WebAPI/ ./Ephata.User.WebAPI/
-RUN dotnet restore
-COPY setup.sh setup.sh
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Admin@123
 
-RUN dotnet tool install --global dotnet-ef
+COPY ./entrypoint.sh .
+COPY ./setup.sql .
 
-COPY . .
-WORKDIR "/src/."
-
-RUN /root/.dotnet/tools/dotnet-ef database update -s ./Ephata.User.WebAPI/Ephata.User.WebAPI.csproj -p ./Ephata.User.Data/Ephata.User.Data.csproj
-
-RUN chmod +x ./setup.sh
-CMD /bin/bash ./setup.sh
+ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]
+CMD [ "/opt/mssql/bin/sqlservr" ]
