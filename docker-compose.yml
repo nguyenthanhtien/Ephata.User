@@ -12,17 +12,6 @@ services:
             - "/Ephata.User.WebAPI/appsettings.json:/appsettings.json"
         depends_on:
             - postgres
-    # sqlserver:
-    #     container_name: sql-service
-    #     environment:
-    #         SA_PASSWORD: "Admin@123"
-    #         ACCEPT_EULA: "Y"
-    #         MSSQL_PID: Express
-    #     ports: 
-    #         - "1439:1433"
-    #     build: 
-    #         context: .
-    #         dockerfile: Dockerfile.Migration
     postgres:
         container_name: postgres-service
         image: postgres:latest
@@ -30,9 +19,8 @@ services:
             POSTGRES_DB: ${POSTGRES_DB:-postgres}
             POSTGRES_USER: ${POSTGRES_USER:-postgres}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-            PGDATA: /data/postgres
         volumes:
-            - "/postgres:/data/postgres"
+            - './initdb:/docker-entrypoint-initdb.d'
         ports:
             - "5432:5432"
         restart: always
