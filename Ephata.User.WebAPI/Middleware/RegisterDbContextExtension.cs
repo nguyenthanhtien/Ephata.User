@@ -11,7 +11,7 @@ namespace Ephata.User.WebAPI.Middleware
         public static void RegisterDbContext(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<UserDbContext>(options =>
-                                                   options.UseSqlServer(connectionString));
+                                                   options.UseNpgsql(connectionString));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                     .AddEntityFrameworkStores<UserDbContext>()

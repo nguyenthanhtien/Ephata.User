@@ -5,19 +5,37 @@ services:
         build: .
         ports:
             - "8000:80"
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Development'
         volumes: 
             - "/Ephata.User.WebAPI/appsettings.Development.json:/appsettings.Development.json"
+            - "/Ephata.User.WebAPI/appsettings.json:/appsettings.json"
         depends_on:
-            - sqlserver
-    sqlserver:
-        container_name: sql-service
+            - postgres
+    # sqlserver:
+    #     container_name: sql-service
+    #     environment:
+    #         SA_PASSWORD: "Admin@123"
+    #         ACCEPT_EULA: "Y"
+    #         MSSQL_PID: Express
+    #     ports: 
+    #         - "1439:1433"
+    #     build: 
+    #         context: .
+    #         dockerfile: Dockerfile.Migration
+    postgres:
+        container_name: postgres-service
+        image: postgres:latest
         environment:
-            SA_PASSWORD: "Admin@123"
-            ACCEPT_EULA: "Y"
-            MSSQL_PID: Express
-        ports: 
-            - "1439:1433"
-        build: 
-            context: .
-            dockerfile: Dockerfile.Migration
+            POSTGRES_DB: ${POSTGRES_DB:-postgres}
+            POSTGRES_USER: ${POSTGRES_USER:-postgres}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+            PGDATA: /data/postgres
+        volumes:
+            - "/postgres:/data/postgres"
+        ports:
+            - "5432:5432"
+        restart: always
+        command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
+  
   

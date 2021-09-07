@@ -24,7 +24,7 @@ namespace Ephata.User.Data
                    .Build();
                 var connectionString = configuration["connectionsString"];
                 //Database.Migrate();
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseNpgsql(connectionString);
             }
         }
         protected override void OnModelCreating(ModelBuilder builder)
